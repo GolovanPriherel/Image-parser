@@ -1,0 +1,7 @@
+lxml
+selenium
+sqlalchemy
+pydantic
+pytest
+fastapi
+uvicorn
