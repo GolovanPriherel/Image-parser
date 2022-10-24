@@ -25,6 +25,7 @@ class ImagesInfoModel(Base):
 class ImagesInfoSchema(BaseSchema):
     id: int
     image_title: str
+    image_tags: List[str]
     image_description: str
     image_path: str
     image_url: str
