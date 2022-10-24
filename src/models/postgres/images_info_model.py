@@ -1,4 +1,5 @@
 import datetime
+from typing import List
 
 from pydantic import Field, BaseModel as BaseSchema
 from sqlalchemy import Column
@@ -12,6 +13,7 @@ class ImagesInfoModel(Base):
 
     id = Column("id", Integer, primary_key=True)
     image_title = Column("image_title", String, default="")
+    image_tags = Column("image_tag", List[String], default=[])
     image_description = Column("image_description", String, default="")
     image_path = Column("image_path", String, default="")
     image_url = Column("image_url", String, default="")

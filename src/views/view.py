@@ -4,9 +4,7 @@ from fastapi import APIRouter
 
 from src.models.postgres.images_info_model import ImagesInfoSchema
 from src.operators.postgres import (
-    CreateDataBase,
-    DataInsertion,
-    DropDataBase
+    insert_images_info
 )
 
 
@@ -30,6 +28,6 @@ async def root():
 
 @router.post("/insert_data")
 async def insert_data(data: List[ImagesInfoSchema]):
-    DataInsertion(data).execute()
+    insert_images_info.execute()
 
     return f'Успешно записано {len(data)} записи.'

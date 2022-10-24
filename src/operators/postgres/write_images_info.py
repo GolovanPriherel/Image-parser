@@ -1,11 +1,13 @@
+from typing import List
+
 from sqlalchemy import select, func
 
 from src.models.postgres.base_model import get_pg_session
-from src.models.postgres.images_info_model import ImagesInfoModel
+from src.models.postgres.images_info_model import ImagesInfoModel, ImagesInfoSchema
 
 
-class CreateDataBase:
-    def __init__(self):
+class InsertImagesInfo:
+    def __init__(self, data: List[ImagesInfoSchema]):
         self.images_info_table = ImagesInfoModel.__table__
 
     def execute(self):
