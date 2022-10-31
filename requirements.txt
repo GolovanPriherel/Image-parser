@@ -1,7 +1,8 @@
 lxml
-selenium
+requests
 sqlalchemy
 pydantic
 pytest
 fastapi
 uvicorn
+psycopg2
