@@ -6,7 +6,7 @@ from src.models.postgres.images_info_model import ImagesInfoSchema
 from src.operators.postgres import (
     insert_images_info
 )
-from src.modules import parser
+from src.modules import px500_parser
 
 
 router = APIRouter(prefix="")
@@ -21,7 +21,9 @@ async def root():
 
 @router.get("/start_parsing")
 async def start_parsing():
-    parser.start_parsing()
+    px500_parser.start_parsing()
+
+    return "Успешно спаршено <ссылка на страницу>"
 
 
 @router.get("/insert_data")

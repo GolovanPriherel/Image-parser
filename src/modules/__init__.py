@@ -1,3 +1,5 @@
-from src.modules.parser import Parser
+from src.modules.deviantart_parser import DeviantartParser
+from src.modules.px500_parser import Px500Parser
 
-parser = Parser()
+deviantart_parser = DeviantartParser()
+px500_parser = Px500Parser()

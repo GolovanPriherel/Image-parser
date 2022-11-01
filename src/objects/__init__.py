@@ -1,3 +1,7 @@
-from src.objects.xpaths import XPaths
+from src.objects.deviant_xpaths import DeviantArtXPaths
+from src.objects.px500_xpaths import PX500XPaths
+from src.objects.px500_xpaths import PX500AuthorizationXPaths
 
-xpaths = XPaths()
+deviant_xpaths = DeviantArtXPaths()
+px500_xpaths = PX500XPaths()
+px500_authorization_xpaths = PX500AuthorizationXPaths()
