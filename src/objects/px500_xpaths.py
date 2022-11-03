@@ -4,6 +4,8 @@ from pydantic import Field, BaseModel as BaseSchema
 
 
 class PX500XPaths(BaseSchema):
+    picture: str = Field(default="//html/body/div[1]/div[5]/div/div/div/div/div[1]/div/div[1]/a",
+                         alias="picture_xpath")
     author: str = Field(
         default="//html/body/div[2]/div/div/div/div[2]/div/div/div[1]/div/div[2]/div[2]/div/p/span/a/text()",
         alias="author_xpath")
@@ -14,7 +16,6 @@ class PX500XPaths(BaseSchema):
         alias="image_tags_xpath")
     next_urls: str = Field(default="",
                            alias="suggested_collections_xpath")
-    # image_url: str = Field(default="", alias="image_url_xpath")
 
 
 class PX500AuthorizationXPaths(BaseSchema):

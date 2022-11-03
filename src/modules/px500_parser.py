@@ -45,6 +45,7 @@ class Px500Parser:
     def start_parsing(self):
         self.chrome_driver = self.get_chromedriver()
 
+        # Авторизация
         for i in range(1, 10):
             try:
                 success = self.authorization()
@@ -56,17 +57,19 @@ class Px500Parser:
             if success is True:
                 break
 
+        # Парсинг
         try:
-            # response = self.get_response(self.test_main_url, headers=None)
-            # response_html = response.content
+            response = self.get_response(self.px500_url, headers=None)
+            response_html = response.content
             #
-            # tree = html.fromstring(response_html)
+            tree = html.fromstring(response_html)
             self.chrome_driver.get(self.px500_url)
 
             # if image_url:
             #     pass
             #     # TODO реализовать проверку наличия фотографии и тегов на странице, и последующий парсинг
 
+            links = tree.xpath()
             # author = tree.xpath(xpaths.author)[0]
             # image_title = tree.xpath(xpaths.image_title)[0]
             # image_tags = tree.xpath(xpaths.image_tags)

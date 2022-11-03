@@ -1,10 +1,12 @@
+import logging
 from typing import List
 
 from fastapi import APIRouter
 
 from src.models.postgres.images_info_model import ImagesInfoSchema
 from src.operators.postgres import (
-    insert_images_info
+    insert_images_info,
+    send_images_info
 )
 from src.modules import px500_parser
 
@@ -26,7 +28,7 @@ async def start_parsing():
     return "Успешно спаршено <ссылка на страницу>"
 
 
-@router.get("/insert_data")
-async def insert_data():
-    insert_images_info.execute()
-
+@router.post("/send_data")
+async def send_data(body: List[ImagesInfoSchema]):
+    logging.warning(body)
+    send_images_info.execute(body)
