@@ -46,6 +46,7 @@ class DeviantartParser:
         # image_description = ",".join(image_description)
 
         # logging.warning(tree)
+
         # TODO реализовать запись данных в очередь
 
         # self.chrome_driver.get(self.test_main_url)

@@ -1,6 +1,8 @@
 import logging
 import time
-from typing import Dict, Optional
+import asyncio
+from typing import Dict, Optional, List
+from urllib.request import urlopen
 
 import requests
 from lxml import etree, html
@@ -42,49 +44,72 @@ class Px500Parser:
 
         return True
 
+    @staticmethod
+    def parse_photo_url(urls: List[str]):
+        for url in urls:
+            response = requests.get(url).content
+
+            tree = html.fromstring(response)
+
+            author = tree.xpath(xpaths.author)
+            image_title = tree.xpath(xpaths.image_title)
+            image_tags = tree.xpath(xpaths.image_tags)
+
+            print(author, image_tags, image_title)
+
     def start_parsing(self):
         self.chrome_driver = self.get_chromedriver()
 
         # Авторизация
-        for i in range(1, 10):
-            try:
-                success = self.authorization()
-            except:
-                success = False
-                time.sleep(5)
-            logging.warning(f"Логинюсь {i} раз")
-            time.sleep(1)
-            if success is True:
-                break
+        # for i in range(1, 10):
+        #     try:
+        #         success = self.authorization()
+        #     except:
+        #         success = False
+        #         time.sleep(5)
+        #     logging.warning(f"Авторизируюсь в/во {i} раз")
+        #     time.sleep(1)
+        #     if success is True:
+        #         break
 
         # Парсинг
         try:
-            response = self.get_response(self.px500_url, headers=None)
-            response_html = response.content
-            #
-            tree = html.fromstring(response_html)
-            self.chrome_driver.get(self.px500_url)
-
+            pass
             # if image_url:
             #     pass
             #     # TODO реализовать проверку наличия фотографии и тегов на странице, и последующий парсинг
 
-            links = tree.xpath()
-            # author = tree.xpath(xpaths.author)[0]
-            # image_title = tree.xpath(xpaths.image_title)[0]
-            # image_tags = tree.xpath(xpaths.image_tags)
-            # image_description = tree.xpath(xpaths.image_description)
-            # image_description = ",".join(image_description)
-
-            # logging.warning(author)
             # TODO реализовать запись данных в очередь
 
-            # self.chrome_driver.get(self.test_main_url)
-            # elements = self.chrome_driver.find_elements(By.XPATH, xpaths.author)
+            self.chrome_driver.get(self.px500_url)
+            elements = self.chrome_driver.page_source
+            with open('data/htmls/px500_popular', 'w') as f:
+                f.write(elements)
+
+            response = urlopen("file:///Users/ilyamanakinson/PycharmProjects/images_parser/data/htmls/px500_popular").read()
+            tree = html.fromstring(response)
+            pictures_urls = tree.xpath(xpaths.picture_profile)
+
+            print("---promotka---")
+
+            # TODO Промотка контента
+            while True:
+                body = self.chrome_driver.find_element('body')
+                for i in range(5):
+                    body.send_keys(Keys.PAGE_DOWN)
+
+            # self.chrome_driver.get("https://500px.com/photo/1056280729/gold-of-rivendell-by-enrico-fossati")
+            # elements = self.chrome_driver.page_source
+            # with open('data/htmls/px500_photo', 'w') as f:
+            #     f.write(elements)
+            #
+
+            # elements = self.chrome_driver.find_elements(By.XPATH, xpaths.picture)
+            # elements = self.chrome_driver.find_elements(By.XPATH, xpaths.image_tags)
+            # logging.warning(elements)
             # for element in elements:
             #     logging.warning(element)
-            #
-            # self.chrome_driver.close()
+
         finally:
             time.sleep(5)
             self.chrome_driver.close()
