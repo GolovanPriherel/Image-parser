@@ -6,6 +6,7 @@ from urllib.request import urlopen
 
 import requests
 from lxml import etree, html
+from xml.etree.ElementTree import ElementTree, tostring
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -26,7 +27,7 @@ class Px500Parser:
     @staticmethod
     def get_response(url: str, headers=None):
         if not headers:
-            # headers = {'Content-Type': 'text/html', }
+            headers = {'Content-Type': 'text/html', }
 
             return requests.get(url, headers)
         else:
@@ -44,18 +45,24 @@ class Px500Parser:
 
         return True
 
-    @staticmethod
-    def parse_photo_url(urls: List[str]):
+    def parse_photo_url(self, urls: List[str]):
         for url in urls:
-            response = requests.get(url).content
+            # headers = {'Content-Type': 'text/html', }
+            # response = requests.get(url, headers=headers)
+            # response_data = response.text
+            self.chrome_driver = self.get_chromedriver()
 
-            tree = html.fromstring(response)
+            self.chrome_driver.get(url)
+            elements = self.chrome_driver.page_source
+            print(elements)
 
-            author = tree.xpath(xpaths.author)
-            image_title = tree.xpath(xpaths.image_title)
-            image_tags = tree.xpath(xpaths.image_tags)
+            # tree = html.fromstring(response_data)
 
-            print(author, image_tags, image_title)
+            # author = tree.xpath(xpaths.author)
+            # image_title = tree.xpath(xpaths.image_title)
+            # image_tags = tree.xpath(xpaths.image_tags)
+            #
+            # print(author, image_tags, image_title)
 
     def start_parsing(self):
         self.chrome_driver = self.get_chromedriver()
