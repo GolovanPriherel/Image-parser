@@ -14,6 +14,7 @@ from selenium.webdriver.common.keys import Keys
 from src.models.postgres.images_info_model import ImagesInfoSchema
 from src.objects import px500_xpaths as xpaths, px500_authorization_xpaths as authorization
 from src.settings import parser_settings
+from src.modules.proxy import get_proxy
 
 
 class Px500Parser:
@@ -23,6 +24,12 @@ class Px500Parser:
 
     def get_chromedriver(self):
         return Chrome(self.driver_path)
+
+    @staticmethod
+    def get_proxy_request(proxy):
+        session = requests.Session()
+        session.proxies = {"http": proxy, "https": proxy}
+        return session
 
     @staticmethod
     def get_response(url: str, headers=None):
