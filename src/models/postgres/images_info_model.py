@@ -1,9 +1,9 @@
 import datetime
-from typing import List
+from typing import List, Optional
 
 from pydantic import Field, BaseModel as BaseSchema
 from sqlalchemy import Column
-from sqlalchemy.types import Integer, String, DateTime, ARRAY
+from sqlalchemy.types import Integer, String, DateTime, ARRAY, Boolean
 
 from src.models.postgres.base_model import Base
 
@@ -11,17 +11,17 @@ from src.models.postgres.base_model import Base
 class ImagesInfoModel(Base):
     __tablename__ = "images_info"
 
-    id = Column("id", Integer, primary_key=True)
-    image_id = Column("image_id", String, default="")
-    author = Column("author", String, default="")
-    category = Column("category", String, default="")
-    image_title = Column("image_title", String, default="")
-    image_tags = Column("image_tags", ARRAY(String), default=[""])
-    image_description = Column("image_description", String, default="")
-    image_path = Column("image_path", String, default="")
-    image_url = Column("image_url", String, default="")
-    image_website = Column("image_website", String, default="")
-    published_at = Column("published_at", DateTime, default=str(datetime.datetime.now()))
+    image_url = Column(String, nullable=True, primary_key=True)
+    image_id = Column(String, nullable=True)
+    author = Column(String, nullable=True)
+    category = Column(String, nullable=True)
+    image_title = Column(String, nullable=True)
+    image_tags = Column(ARRAY(String), nullable=True)
+    image_description = Column(String, nullable=True)
+    image_path = Column(String, nullable=True)
+    image_website = Column(String, nullable=True)
+    published_at = Column(DateTime, nullable=True)
+    parsed = Column(Boolean, default=False)
 
     inserted_at = Column("inserted_at", DateTime, default=str(datetime.datetime.now()))
 
@@ -29,15 +29,19 @@ class ImagesInfoModel(Base):
 
 
 class ImagesInfoSchema(BaseSchema):
-    id: int
-    image_id: str
-    author: str
-    category: str
-    image_title: str
-    image_tags: List[str]
-    image_description: str
-    image_path: str
+    image_url: str = Field(default="")
+    image_id: Optional[str]
+    author: Optional[str]
+    category: Optional[str]
+    image_title: Optional[str]
+    image_tags: Optional[List[str]]
+    image_description: Optional[str]
+    image_path: Optional[str]
+    image_website: Optional[str]
+    published_at: Optional[datetime.datetime] = Field(default_factory=datetime.datetime.now)
+    inserted_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
+
+
+class ImagesQueue(BaseSchema):
+    image_name: str
     image_url: str
-    image_website: str
-    published_at: datetime.datetime = Field(default_factory=datetime.datetime.now())
-    inserted_at: datetime.datetime = Field(default_factory=datetime.datetime.now())

@@ -12,7 +12,7 @@ class ParserSettings(BaseSchema):
     proxy_url: str = Field(env="PROXY_URL", default="https://free-proxy-list.net/")
     check_ip: str = Field(env="CHECK_IP_URL", default="http://icanhazip.com")
 
-    # linux_driver_path: str = Field(default="data/chrome_driver/chromedriver_linux")
+    linux_driver_path: str = Field(default="data/chrome_driver/chromedriver_linux")
     m1_driver_path: str = Field(default="data/chrome_driver/chromedriver_m1")
     # test_website_url: str = Field(env="TEST_WEBSITE_URL", default="https://www.deviantart.com/cosmicspark/art/Cosmic-Nebula-4-931314924")
     test_website_url: str = Field(env="TEST_WEBSITE_URL", default="https://www.deviantart.com/azproduction/art/Rathalos-Armor-924830107")

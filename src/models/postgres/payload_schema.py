@@ -2,6 +2,7 @@ import datetime
 
 from pydantic import Field, BaseModel as BaseSchema
 
+
 class PayloadSchema(BaseSchema):
     id: int
     image_title: str

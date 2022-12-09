@@ -5,4 +5,7 @@ pydantic
 pytest
 fastapi
 uvicorn
-psycopg2
+psycopg2-binary
+selenium
+sqlalchemy_mixins
+python-dotenv

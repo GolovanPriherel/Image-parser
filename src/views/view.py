@@ -5,10 +5,9 @@ from fastapi import APIRouter
 
 from src.models.postgres.images_info_model import ImagesInfoSchema
 from src.operators.postgres import (
-    insert_images_info,
-    send_images_info
+    insert_images_info
 )
-from src.modules import px500_parser
+from src.modules import px500_parser, deviantart_parser
 
 
 router = APIRouter(prefix="")
@@ -23,12 +22,7 @@ async def root():
 
 @router.get("/start_parsing")
 async def start_parsing():
-    px500_parser.start_parsing()
+    # px500_parser.start_parsing()
+    deviantart_parser.start_parsing()
 
     return "Успешно спаршено <ссылка на страницу>"
-
-
-@router.post("/send_data")
-async def send_data(body: List[ImagesInfoSchema]):
-    logging.warning(body)
-    send_images_info.execute(body)
