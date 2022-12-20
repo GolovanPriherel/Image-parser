@@ -3,6 +3,7 @@ import time
 import asyncio
 from typing import Dict, Optional, List
 from urllib.request import urlopen
+import uuid
 
 import requests
 from lxml import etree, html
@@ -69,17 +70,46 @@ class Px500Parser:
 
         return links_list
 
-    @staticmethod
-    def parse_photo_url(urls: List[str]):
+    def download_photo(self, image_url: str, image_name: str):
+        resource = urlopen(image_url)
+        out = open(f"data/images/{image_name}.jpg", 'wb')
+        out.write(resource.read())
+        out.close()
+
+    def parse_photo_url(self, urls: List[str], req_session):
+        images_path = "data/images/"
+        batch = []
+        parsed_data = ImagesInfoSchema().dict()
+
         for url in urls:
             headers = {'Content-Type': 'text/html', }
-            response = requests.get(url, headers=headers)
-            response_data = response.text
+            response = req_session.get(url, headers=headers)
+            response_data = response.content
+
+            image_name = str(uuid.uuid1(0, 0)) + ".jpg"
 
             tree = html.fromstring(response_data)
+            # full_image_url = tree.xpath(xpaths.full_image_url)
+            #
+            # logging.warning(full_image_url)
 
-            category = tree.xpath(xpaths.category)
-            print(category)
+            # self.download_photo(image_url=full_image_url,
+            #                     image_name=image_name)
+
+            parsed_data["author"] = tree.xpath(xpaths.author)
+            parsed_data["image_title"] = tree.xpath(xpaths.image_title)
+            parsed_data["image_tag"] = tree.xpath(xpaths.image_tags)
+            parsed_data["image_description"] = tree.xpath(xpaths.image_description)
+            parsed_data["image_url"] = url
+            parsed_data["image_website"] = parser_settings.px500_website_url
+            parsed_data["image_name"] = image_name
+            parsed_data["image_path"] = str(images_path + image_name)
+
+            # logging.warning(url)
+
+            batch.append(parsed_data)
+            logging.warning(batch)
+            break
 
     def start_parsing(self):
         # self.chrome_driver = self.get_chromedriver()
@@ -127,24 +157,12 @@ class Px500Parser:
             # time.sleep(5)
             # links_list = self.get_page_links()
             # print(links_list)
+            # req_session = self.get_proxy_request(get_proxy())
 
             links_list = ['https://500px.com/photo/1057683104/morning-mood-by-andy58andras-schafer',
                           "https://500px.com/photo/1057664465/deer-in-front-of-an-old-stone-barn-by-jorn-allan-pedersen"]
-            self.parse_photo_url(links_list)
-
-            # self.chrome_driver.get("https://500px.com/photo/1057664465/deer-in-front-of-an-old-stone-barn-by-jorn-allan-pedersen")
-            # category = self.chrome_driver.find_elements(By.XPATH, xpaths.category)
-            # print(category)
-            # elements = self.chrome_driver.page_source
-            # with open('data/htmls/px500_photo', 'w') as f:
-            #     f.write(elements)
-            #
-
-            # elements = self.chrome_driver.find_elements(By.XPATH, xpaths.picture)
-            # elements = self.chrome_driver.find_elements(By.XPATH, xpaths.image_tags)
-            # logging.warning(elements)
-            # for element in elements:
-            #     logging.warning(element)
+            html = requests.get(links_list[0])
+            self.parse_photo_url(links_list, requests)
 
         finally:
             pass

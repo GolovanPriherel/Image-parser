@@ -77,15 +77,6 @@ class DeviantartParser:
         parsed_data = ImagesInfoSchema().dict()
 
         req_session = self.get_proxy_request(get_proxy())
-        # parsed_data = {"data": {
-        #     "authors": [],
-        #     "images_titles": [],
-        #     "image_tags": [],
-        #     "image_descriptions": [],
-        #     "image_urls": [],
-        #     "image_names": []
-        #     }
-        # }
 
         for url in urls:
             headers = {'Content-Type': 'text/html', }

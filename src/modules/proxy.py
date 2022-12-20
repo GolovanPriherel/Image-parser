@@ -25,8 +25,7 @@ def get_proxy():
             session.proxies = {"http": proxy, "https": proxy}
             ses = session.get("http://icanhazip.com", timeout=1.5).text.strip()
             print(f"Успешно выбран прокси {proxy}")
-            return proxy
+            return session
         except:
-            print(f"--- pass {proxy}")
-        finally:
             session.close()
+            print(f"--- pass {proxy}")
