@@ -7,9 +7,6 @@ import json
 import requests
 from lxml import etree, html
 from xml.etree.ElementTree import ElementTree, tostring
-from selenium.webdriver import Chrome
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
 
 from src.models.postgres.rule34_images_info import Rule34ImagesInfoSchema
 from src.settings import parser_settings
@@ -53,8 +50,9 @@ class Rule34Parser:
 
             batch.append(parsed_data)
             logging.warning(batch)
-            insert_images_info.execute(json.dumps(batch, default=str))
             break
+
+        insert_images_info.execute(json.dumps(batch, default=str))
         # insert_images_info.execute(json.dumps(batch, default=str))
         # return batch
 
@@ -83,8 +81,6 @@ class Rule34Parser:
 
             self.parse_photo_url(image_urls)
 
-            # TODO реализовать запись данных в очередь
-
             # time.sleep(5)
             # for i in range(5):
             #     links_list = self.get_page_links()
@@ -97,7 +93,6 @@ class Rule34Parser:
             #     else:
             #         next_url = self.chrome_driver.find_element(By.XPATH, xpaths.next_button_2).get_attribute("href")
             #         self.chrome_driver.get(next_url)
-
 
         except Exception as err:
             # logging.exception(err)

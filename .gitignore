@@ -3,5 +3,6 @@ venv
 .idea/
 .pytest_cache/
 __pycache__/
+data/images/*
 
 html_test_parser.py

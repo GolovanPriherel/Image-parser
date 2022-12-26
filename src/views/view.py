@@ -6,9 +6,10 @@ from fastapi import APIRouter
 from src.models.postgres.images_info_model import ImagesInfoSchema
 from src.models.postgres.rule34_images_info import Rule34ImagesInfoSchema
 from src.operators.postgres import (
-    rule34_insert_images_info
+    rule34_send_data,
+    rule34_url_parser
 )
-from src.modules import px500_parser, deviantart_parser, rule34_parser
+from src.modules import px500_parser, deviantart_parser, rule34_parser, rule34_urls_parser
 
 router = APIRouter(prefix="")
 
@@ -29,6 +30,13 @@ async def start_parsing():
     return "Успешно спаршено <ссылка на страницу>"
 
 
-@router.get("/send_data")
+@router.get("/send_data", response_model=Rule34ImagesInfoSchema)
 async def send_data():
-    rule34_insert_images_info.execute(Rule34ImagesInfoSchema().dict())
+    data = Rule34ImagesInfoSchema().dict()
+    logging.warning(data)
+    rule34_send_data.execute(data)
+
+
+@router.get("/parsing_urls")
+async def send_data():
+    rule34_urls_parser.start_parsing()

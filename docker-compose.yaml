@@ -9,3 +9,11 @@ services:
       - "5002:5002"
     volumes:
       - ./data:/data
+    networks:
+      backend:
+
+
+networks:
+  backend:
+    name: backend
+    external: true
