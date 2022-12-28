@@ -20,10 +20,10 @@ class ImagesInfoModel(Base):
     image_description = Column(String, nullable=True)
     image_path = Column(String, nullable=True)
     image_website = Column(String, nullable=True)
-    published_at = Column(DateTime, nullable=True)
+    published_at = Column(String, nullable=True)
     parsed = Column(Boolean, default=False)
 
-    inserted_at = Column("inserted_at", DateTime, default=str(datetime.datetime.now()))
+    inserted_at = Column(DateTime, default_factory=datetime.datetime.now)
 
     __table_args__ = {'extend_existing': True}
 
@@ -38,7 +38,8 @@ class ImagesInfoSchema(BaseSchema):
     image_description: Optional[str]
     image_path: Optional[str]
     image_website: Optional[str]
-    published_at: Optional[datetime.datetime] = Field(default_factory=datetime.datetime.now)
+    published_at: Optional[str] = Field(default="unknown")
+
     inserted_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
 
 

@@ -21,12 +21,13 @@ def test_rule34_send_data():
     for i in range(5):
         data = Rule34ImagesInfoSchema().dict()
         data["image_url"] = test_url
-        data = Rule34ImagesInfoSchema.parse_obj(data)
+        # data = Rule34ImagesInfoSchema.parse_obj(data)
         data_list.append(data)
 
-    data_list = Rule34ImagesInfoListSchema.parse_obj(data_list)
+    payload = {"data": data_list}
+    payload = Rule34ImagesInfoListSchema.parse_obj(payload)
 
-    rule34_send_data.execute(data_list)
+    rule34_send_data.execute(payload)
 
     with get_pg_session() as pg_session:
         query = select(

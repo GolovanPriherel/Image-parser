@@ -24,7 +24,7 @@ class Rule34ImagesInfoModel(BaseModel):
     published_at = Column(String, nullable=True)
     parsed = Column(Boolean, default=False)
 
-    inserted_at = Column("inserted_at", DateTime, default=str(datetime.datetime.now()))
+    inserted_at = Column(DateTime, default_factory=datetime.datetime.now)
 
 
 class Rule34ImagesInfoSchema(BaseSchema):

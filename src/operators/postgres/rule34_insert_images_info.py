@@ -16,7 +16,7 @@ class Rule34SendData:
         self.url = url
         self._data = []
 
-    def execute(self, data: Rule34ImagesInfoListSchema):
+    def execute(self, data: List[Rule34ImagesInfoSchema]):
         self._data = data
         print(self._data)
         with get_pg_session() as pg_session:
@@ -27,4 +27,4 @@ class Rule34SendData:
                 raise Exception(e)
 
     def processing(self):
-        requests.post(f"http://{self.url}:5001/insert_data", data=json.dumps({"data": self._data}))
+        requests.post(f"http://{self.url}:5001/insert_data", data={"data": self._data})

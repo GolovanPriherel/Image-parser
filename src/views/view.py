@@ -30,13 +30,6 @@ async def start_parsing():
     return "Успешно спаршено <ссылка на страницу>"
 
 
-@router.get("/send_data", response_model=Rule34ImagesInfoSchema)
-async def send_data():
-    data = Rule34ImagesInfoSchema().dict()
-    logging.warning(data)
-    rule34_send_data.execute(data)
-
-
 @router.get("/parsing_urls")
 async def send_data():
     rule34_urls_parser.start_parsing()
