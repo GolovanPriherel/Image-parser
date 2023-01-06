@@ -24,7 +24,7 @@ class Rule34ImagesInfoModel(BaseModel):
     published_at = Column(String, nullable=True)
     parsed = Column(Boolean, default=False)
 
-    inserted_at = Column(DateTime, default_factory=datetime.datetime.now)
+    inserted_at = Column(DateTime, default=str(datetime.datetime.now()))
 
 
 class Rule34ImagesInfoSchema(BaseSchema):
@@ -38,10 +38,11 @@ class Rule34ImagesInfoSchema(BaseSchema):
     image_path: Optional[str]
     image_website: Optional[str]
     image_rating: Optional[int]
+    published_at : Optional[str]
     parsed: bool = Field(default=False)
 
     published_at: Optional[str] = Field(default="unknown")
-    inserted_at: datetime.datetime = Field(default_factory=datetime.datetime.now)
+    inserted_at: datetime.datetime = Field(default=str(datetime.datetime.now()))
 
 
 class Rule34ImagesInfoListSchema(BaseSchema):

@@ -11,3 +11,7 @@ class Rule34XPaths(BaseSchema):
     image_tags: List[str] = Field(default="//li[@class='tag-type-general tag']/a[2]/text()")
     image_metadata_tags: List[str] = Field(default="//li[@class='tag-type-metadata tag']/a[2]/text()")
     full_image_href: str = Field(default="//a[contains(text(), 'Original image')]/@href")
+
+    # TODO потом переделать пути
+    posted: str = Field(default="/html/body/div[5]/div/div[1]/div[3]/ul/li[2]/text()[1]")
+    rating: str = Field(default="/html/body/div[5]/div/div[1]/div[3]/ul/li[6]/span/text()")

@@ -23,7 +23,7 @@ class ImagesInfoModel(Base):
     published_at = Column(String, nullable=True)
     parsed = Column(Boolean, default=False)
 
-    inserted_at = Column(DateTime, default_factory=datetime.datetime.now)
+    inserted_at = Column(DateTime, default=str(datetime.datetime.now()))
 
     __table_args__ = {'extend_existing': True}
 
