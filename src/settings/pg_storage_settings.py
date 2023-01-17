@@ -7,18 +7,20 @@ load_dotenv()
 
 
 class PGStorageSetting(BaseSettings):
-
-    # def __init__(self, test_host=None):
-    #     self.test_host = test_host
-
-    host: str = Field(env="PG_HOST", default="postgres_db")
+    # host: str = Field(env="PG_HOST", default="postgres_db")
+    host: str = Field(env="TEST_URL", default="localhost")
     port: int = Field(env="PG_PORT", default=5432)
     username: str = Field(env="PG_USERNAME", default="postgres")
     password: str = Field(env="PG_PASSWORD", default="postgres")
     database: str = Field(env="PG_DATABASE", default="postgres")
 
+    # Docker
+    # def geturl(self):
+    #     return f'postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}'
+
+    # No Docker
     def geturl(self):
-        return f'postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}'
+        return f'postgresql+psycopg2://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}'
 
     class Config:
         env_file = ".env"

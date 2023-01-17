@@ -26,8 +26,4 @@ class Rule34SendData:
     def processing(self):
         data1 = {"data": self._data}
         data1 = Rule34ImagesInfoListSchema.parse_obj(data1)
-        # logging.warning(data1.dict())
-        # logging.warning(data1)
-        # data1 = self._data[0].dict()
-        # data1["inserted_at"] = str(data1["inserted_at"])
         requests.post(f"http://{self.url}:5001/insert_data", json=data1.dict())

@@ -8,7 +8,7 @@ def test_rule34_send_data():
 
     from src.models.postgres.base_model import get_pg_session
     from src.operators.postgres.rule34_insert_images_info import Rule34SendData
-    from src.models.postgres.rule34_images_info import Rule34ImagesInfoModel, Rule34ImagesInfoSchema, Rule34ImagesInfoListSchema
+    from src.models.postgres.rule34_images_info import Rule34ImagesInfoModel, Rule34ImagesInfoSchema
     from src.settings.test_settings import TestSettings
 
     test_settings = TestSettings()

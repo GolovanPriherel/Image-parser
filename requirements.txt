@@ -9,3 +9,6 @@ psycopg2-binary
 selenium
 sqlalchemy_mixins
 python-dotenv
+pytest-postgresql
+pytest-mock
+alembic
