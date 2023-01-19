@@ -8,11 +8,11 @@ import requests
 from lxml import etree, html
 from xml.etree.ElementTree import ElementTree, tostring
 
-from src.models.postgres.rule34_images_info import Rule34ImagesInfoSchema
+from src.models.postgres.rule34_images_info import Rule34ImagesInfoSchema, Rule34ImagesInfoListSchema
 from src.settings import parser_settings
 from src.modules.proxy import get_proxy
 from src.objects import rule34_xpaths as xpaths
-from src.operators.postgres import insert_images_info
+from src.operators.postgres import rule34_send_data
 from src.helpers import download_photo
 
 
@@ -26,33 +26,40 @@ class Rule34Parser:
         parsed_data = Rule34ImagesInfoSchema().dict()
 
         for url in urls:
-            headers = {'Content-Type': 'text/html', }
-            response = requests.get(self.rule34_website + url, headers=headers)
-            response_data = response.content
+            try:
+                headers = {'Content-Type': 'text/html', }
+                response = requests.get(self.rule34_website + url, headers=headers)
+                response_data = response.content
 
-            image_name = str(uuid.uuid1(0, 0)) + ".jpg"
+                image_name = str(uuid.uuid1(0, 0)) + ".jpg"
 
-            tree = html.fromstring(response_data)
-            full_image_url = tree.xpath(xpaths.full_image_href)
+                tree = html.fromstring(response_data)
+                full_image_url = tree.xpath(xpaths.full_image_href)
 
-            parsed_data["image_artists"] = tree.xpath(xpaths.image_artist)
-            parsed_data["image_copyrights"] = tree.xpath(xpaths.image_copyrights)
-            parsed_data["image_characters"] = tree.xpath(xpaths.image_character_tag)
-            parsed_data["image_tags"] = tree.xpath(xpaths.image_tags)
-            parsed_data["image_metadata"] = tree.xpath(xpaths.image_metadata_tags)
-            parsed_data["image_url"] = self.rule34_website + url
-            parsed_data["image_website"] = parser_settings.rule34_website
-            parsed_data["image_name"] = image_name
-            parsed_data["image_path"] = str(images_path + image_name)
+                parsed_data["image_artists"] = tree.xpath(xpaths.image_artist)
+                parsed_data["image_copyrights"] = tree.xpath(xpaths.image_copyrights)
+                parsed_data["image_characters"] = tree.xpath(xpaths.image_character_tag)
+                parsed_data["image_tags"] = tree.xpath(xpaths.image_tags)
+                parsed_data["image_metadata"] = tree.xpath(xpaths.image_metadata_tags)
+                parsed_data["image_url"] = self.rule34_website + url
+                parsed_data["image_website"] = parser_settings.rule34_website
+                parsed_data["image_name"] = image_name
+                parsed_data["image_path"] = str(images_path + image_name)
 
-            download_photo(image_url=full_image_url[0],
-                                image_name=image_name)
+                logging.warning(full_image_url)
 
-            batch.append(parsed_data)
-            logging.warning(batch)
-            break
+                # download_photo(image_url=full_image_url[0],
+                #                     image_name=image_name)
 
-        insert_images_info.execute(json.dumps(batch, default=str))
+                batch.append(parsed_data)
+                break
+            except:
+                continue
+
+        batch = Rule34ImagesInfoListSchema.parse_obj(batch)
+        logging.warning(type(batch))
+
+        # rule34_send_data.execute(json.dumps(batch, default=str))
         # insert_images_info.execute(json.dumps(batch, default=str))
         # return batch
 
@@ -76,8 +83,8 @@ class Rule34Parser:
 
             image_urls = tree.xpath(xpaths.picture_profile)
 
-            # for i, url in enumerate(image_urls):
-            #     image_urls[i] = self.rule34_website + url
+            for i, url in enumerate(image_urls):
+                image_urls[i] = self.rule34_website + url
 
             self.parse_photo_url(image_urls)
 

@@ -6,7 +6,7 @@ import requests
 import sqlalchemy_mixins.session
 
 from src.models.postgres.base_model import get_pg_session
-from src.models.postgres.rule34_images_info import Rule34ImagesInfoModel, Rule34ImagesInfoSchema, Rule34ImagesInfoListSchema
+from src.models.postgres.rule34_images_info import Rule34ImagesInfoSchema, Rule34ImagesInfoListSchema
 
 
 class Rule34SendData:
@@ -14,7 +14,7 @@ class Rule34SendData:
         self.url = url
         self._data = []
 
-    def execute(self, data: List[Rule34ImagesInfoSchema]):
+    def execute(self, data: Rule34ImagesInfoSchema):
         self._data = data
         with get_pg_session() as pg_session:
             try:
@@ -26,4 +26,4 @@ class Rule34SendData:
     def processing(self):
         data1 = {"data": self._data}
         data1 = Rule34ImagesInfoListSchema.parse_obj(data1)
-        requests.post(f"http://{self.url}:5001/insert_data", json=data1.dict())
+        requests.post(f"http://localhost:5001/insert_data", json=data1.dict())

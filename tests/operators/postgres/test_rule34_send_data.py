@@ -4,7 +4,7 @@ import pydantic
 
 
 def test_rule34_send_data():
-    from sqlalchemy import select, tuple_, update
+    from sqlalchemy import select, tuple_, update, delete
 
     from src.models.postgres.base_model import get_pg_session
     from src.operators.postgres.rule34_insert_images_info import Rule34SendData
@@ -25,7 +25,7 @@ def test_rule34_send_data():
 
     payload = data_list
 
-    # rule34_send_data.execute(payload)
+    rule34_send_data.execute(payload)
 
     with get_pg_session() as pg_session:
         query = select(
@@ -35,4 +35,6 @@ def test_rule34_send_data():
         )
 
         table_data = pg_session.execute(query).fetchall()
-        print(table_data)
+
+    logging.warning(table_data)
+    assert len(table_data) == 1

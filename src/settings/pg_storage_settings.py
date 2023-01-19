@@ -20,7 +20,7 @@ class PGStorageSetting(BaseSettings):
 
     # No Docker
     def geturl(self):
-        return f'postgresql+psycopg2://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}'
+        return f'postgresql://{self.username}:{self.password}@{self.host}:{self.port}/{self.database}'
 
     class Config:
         env_file = ".env"

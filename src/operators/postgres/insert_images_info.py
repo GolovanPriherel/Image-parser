@@ -21,5 +21,4 @@ class InsertImagesInfo:
             raise Exception(e)
 
     def processing(self):
-        # for element in self._data:
-        requests.post("parser_backend_service:5001/insert_data", json=self._data)
+        requests.post("localhost:5001/insert_data", json=self._data)
